@@ -32,7 +32,19 @@ compat.GetMouseFocus = GetMouseFocus or function()
     return foci and foci[1]
 end
 
-compat.GetItemInfo = GetItemInfo or C_Item.GetItemInfo
+-- Forever characters have surnames: UnitName returns (firstName, surname) instead of
+-- (name, realm). Returns the display name (with surname) and the realm, if any.
+compat.hasSurnames = (NameUtil and NameUtil.FormatUnitNameForDisplay) and true or false
+
+function compat.UnitNameAndRealm(unit)
+    local name, second = UnitName(unit)
+    if (compat.hasSurnames) then
+        return NameUtil.FormatUnitNameForDisplay(unit), nil
+    end
+    return name, second
+end
+
+compat.GetItemInfo =GetItemInfo or C_Item.GetItemInfo
 compat.GetItemInfoInstant = GetItemInfoInstant or C_Item.GetItemInfoInstant
 compat.GetItemQualityColor = GetItemQualityColor or C_Item.GetItemQualityColor
 compat.GetSpellTexture = GetSpellTexture or (C_Spell and C_Spell.GetSpellTexture)

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 (2026-09-19)
+
+- Forever surnames: the full name (first name + surname) is shown once, in class color. Before, the surname
+  also appeared as a title and in the realm slot.
+- The own realm name is no longer appended to every player (Forever unit names don't carry a realm).
+- Title detection uses plain matching and still shows titles when the PvP name has only the first name.
+
 ## 1.0.0 (2026-09-19)
 
 First release for WoW Forever (interface 16001), based on Road-block/TinyTooltip 9.0.11.

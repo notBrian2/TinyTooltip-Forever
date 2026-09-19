@@ -13,7 +13,7 @@ local nosecret = compat.nosecret
 
 local function GetTargetString(unit)
     if (not UnitExists(unit) or addon:IsUnitRestricted(unit)) then return end
-    local name = UnitName(unit)
+    local name = compat.UnitNameAndRealm(unit)
     local icon = addon:GetRaidIcon(unit) or ""
     if nosecret(UnitIsUnit(unit, "player")) then
         return format("|cffff3333>>%s<<|r", strupper(YOU))
@@ -69,7 +69,7 @@ local function GetTargetByString(mouseover, num, tip)
                 end
                 roleIcon  = addon:GetRoleIcon(prefix..i) or ""
                 colorCode = select(4,GetClassColor(select(2,UnitClass(prefix..i))))
-                name      = UnitName(prefix..i)
+                name      = compat.UnitNameAndRealm(prefix..i)
                 tip:AddLine("   " .. roleIcon .. " |c" .. colorCode .. name .. "|r")
             end
         end

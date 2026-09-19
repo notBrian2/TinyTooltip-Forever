@@ -351,12 +351,15 @@ end
 
 -- 頭銜 @param2:true為前綴
 function addon:GetTitle(name, pvpName)
-    if (not pvpName) then return end
+    if (not pvpName or not name) then return end
     if (name == pvpName) then return end
-    local pos = string.find(pvpName, name)
-    local title = pvpName:gsub(name, "", 1)
+    -- plain find: names may contain pattern characters
+    local pos = string.find(pvpName, name, 1, true)
+    if (not pos) then return end
+    local title = strsub(pvpName, 1, pos - 1) .. strsub(pvpName, pos + #name)
     title = title:gsub(",", ""):gsub("，", "")
     title = strtrim(title)
+    if (title == "") then return end
     return title, pos ~= 1
 end
 
@@ -410,7 +413,8 @@ end
 -- 全信息
 local t = {}
 function addon:GetUnitInfo(unit)
-    local name, realm = UnitName(unit)
+    local firstName = UnitName(unit)
+    local name, realm = compat.UnitNameAndRealm(unit)
     local pvpName = UnitPVPName(unit)
     local gender = UnitSex(unit)
     local level = UnitLevel(unit)
@@ -435,7 +439,8 @@ function addon:GetUnitInfo(unit)
     t.role         = role ~= "NONE" and role
     t.name         = name
     t.gender       = self:GetGender(gender)
-    t.realm        = realm or GetRealmName()
+    -- Forever has no realm in unit names, so don't print the own realm after every player
+    t.realm        = realm or (not compat.hasSurnames and GetRealmName()) or nil
     t.levelValue   = level >= 0 and level or "??"
     t.gearScore    = self:GetUnitGearscore(unit)
     t.className    = className
@@ -454,7 +459,7 @@ function addon:GetUnitInfo(unit)
     t.classifRare  = (classif == "rare" or classif == "rareelite") and RARE
     t.isPlayer     = UnitIsPlayer(unit) and PLAYER
     t.moveSpeed    = self:GetUnitSpeed(unit)
-    t.zone         = self:GetZone(unit, t.name, t.realm)
+    t.zone         = self:GetZone(unit, t.name, t.realm or GetRealmName())
     t.unit         = unit                     --unit
     t.level        = level                    --1~123|-1
     t.effectiveLevel = effectiveLevel or level
@@ -464,6 +469,10 @@ function addon:GetUnitInfo(unit)
     t.reaction     = reaction                 --nil|1|2|3|4|5|6|7|8
     t.classif      = classif                  --normal|worldboss|elite|rare|rareelite
     t.title, t.titleIsPrefix = self:GetTitle(name, pvpName)
+    -- Forever: the PvP name may carry only the first name ("Private Steven")
+    if (not t.title and pvpName and firstName ~= name and not strfind(pvpName, name, 1, true)) then
+        t.title, t.titleIsPrefix = self:GetTitle(firstName, pvpName)
+    end
     if (t.classifBoss) then t.classifElite = false end
     return t
 end
