@@ -1,0 +1,29 @@
+## Interface: 16001
+## Title: TinyTooltip Forever
+## Notes: A powerful tooltip addon, ported to World of Warcraft Forever
+## Author: M (original), Road-block, notBrian2 (Forever port)
+## Version: 1.0.0
+## X-License: MIT
+## X-Website: https://github.com/notBrian2/TinyTooltip-Forever
+## SavedVariables: BigTipDB
+## SavedVariablesPerCharacter: TinyTooltipCharacterDB
+
+libs\lib.xml
+Compat.lua
+Core.lua
+Config.lua
+General.lua
+Anchor.lua
+Unit.lua
+Target.lua
+Model.lua
+Item.lua
+Spell.lua
+Quest.lua
+LinkID.lua
+Mount.lua
+SkinFrames.lua
+
+libs\Template.xml
+locales\locales.xml
+Options.lua
