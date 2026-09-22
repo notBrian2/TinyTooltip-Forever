@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 (2026-09-22)
+
+- Fixed static ("anchor") tooltip positioning (reported by SwiftyBag). This client attaches the default
+  tooltip to its Edit Mode container rather than UIParent, so TinyTooltip never moved it and tooltips
+  always showed bottom right. Anchored tooltips now go to the configured point and offset.
+
 ## 1.0.2 (2026-09-22)
 
 - Fixed an error when changing the player/NPC background alpha or the tooltip scale in the options

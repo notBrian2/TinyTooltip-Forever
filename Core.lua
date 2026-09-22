@@ -670,7 +670,8 @@ end)
 
 LibEvent:attachTrigger("tooltip.anchor.static", function(self, frame, parent, offsetX, offsetY, anchorPoint)
     local anchor = select(2, frame:GetPoint())
-    if (anchor == UIParent) then
+    -- modern clients anchor the default tooltip to an Edit Mode container, not UIParent
+    if (anchor == UIParent or (anchor and (anchor == GameTooltipDefaultContainer or anchor == SharedTooltipDefaultContainer))) then
         frame:ClearAllPoints()
         frame:SetPoint(anchorPoint or "BOTTOMRIGHT", UIParent, anchorPoint or "BOTTOMRIGHT", tonumber(offsetX) or (-CONTAINER_OFFSET_X-13), tonumber(offsetY) or CONTAINER_OFFSET_Y)
     end
