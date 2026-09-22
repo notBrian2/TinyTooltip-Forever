@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 (2026-09-22)
+
+- Fixed an error when changing the player/NPC background alpha or the tooltip scale in the options
+  (reported by ammoJD). The sliders saved these as text (e.g. `"0.90"`), which this client's
+  `SetBackdropColor` / `SetScale` reject. They now save numbers, and values already saved as text
+  (or imported through the Variables page) are converted when used.
+
 ## 1.0.1 (2026-09-19)
 
 - Forever surnames: the full name (first name + surname) is shown once, in class color. Before, the surname

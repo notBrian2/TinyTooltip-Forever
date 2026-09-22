@@ -121,10 +121,11 @@ function widgets:slider(parent, config)
     frame:SetValue(GetVariable(config.keystring))
     frame:SetScript("OnValueChanged", function(self, value)
         local step = self:GetValueStep() or 1
+        -- tonumber: format() returns a string, and this client's widget APIs reject numeric strings
         if (step < 0.1) then
-            value = format("%.2f", value)
+            value = tonumber(format("%.2f", value))
         elseif (step < 1) then
-            value = format("%.1f", value)
+            value = tonumber(format("%.1f", value))
         else
             value = floor(value+0.2)
         end

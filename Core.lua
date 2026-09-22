@@ -657,7 +657,7 @@ addon.filterfunc.samefaction = function(raw)
 end
 
 LibEvent:attachTrigger("tooltip.scale", function(self, frame, scale)
-    frame:SetScale(scale)
+    frame:SetScale(tonumber(scale) or 1)  -- older versions saved the slider value as a string
 end)
 
 LibEvent:attachTrigger("tooltip.anchor.cursor", function(self, frame, parent)

@@ -35,13 +35,13 @@ local function ColorBackground(tip, config, raw)
     if not bg then return end
     if (bg.colorfunc == "default" or bg.colorfunc == "" or bg.colorfunc == "inherit") then
         local r, g, b, a = unpack(addon.db.general.background)
-        a = bg.alpha or a
+        a = tonumber(bg.alpha) or a  -- older versions saved the slider value as a string
         LibEvent:trigger("tooltip.style.background", tip, r, g, b, a)
         return
     end
     if (addon.colorfunc[bg.colorfunc]) then
         local r, g, b = addon.colorfunc[bg.colorfunc](raw)
-        local a = bg.alpha or 0.8
+        local a = tonumber(bg.alpha) or 0.8
         LibEvent:trigger("tooltip.style.background", tip, r, g, b, a)
     end
 end
