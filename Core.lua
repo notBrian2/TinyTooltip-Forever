@@ -677,6 +677,16 @@ LibEvent:attachTrigger("tooltip.anchor.static", function(self, frame, parent, of
     end
 end)
 
+-- keep the tooltip in Blizzard's default tooltip area, but pinned by the chosen corner
+-- (a top corner hangs down from the area, a bottom corner grows up from it)
+LibEvent:attachTrigger("tooltip.anchor.default.corner", function(self, frame, parent, corner)
+    local _, relTo = frame:GetPoint(1)
+    if (issecret(relTo)) then return end
+    relTo = relTo or GameTooltipDefaultContainer or UIParent
+    frame:ClearAllPoints()
+    frame:SetPoint(corner, relTo, corner, 0, 0)
+end)
+
 LibEvent:attachTrigger("tooltip.anchor.none", function(self, frame, parent)
     frame:SetOwner(parent, "ANCHOR_NONE")
     frame:Hide()
