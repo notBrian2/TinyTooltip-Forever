@@ -470,6 +470,7 @@ function widgets:anchorbutton(parent, config)
             saframe.ky = self.keystring .. ".y"
             saframe.cp = self.keystring .. ".p"
             saframe[GetVariable(saframe.cp) or "BOTTOMRIGHT"]:GetNormalTexture():SetVertexColor(1, 0.2, 0.1, 1)
+            saframe:ClearAllPoints()
             saframe:SetPoint(GetVariable(saframe.cp) or "BOTTOMRIGHT", UIParent, GetVariable(saframe.cp) or "BOTTOMRIGHT", GetVariable(saframe.kx) or -CONTAINER_OFFSET_X-13, GetVariable(saframe.ky) or CONTAINER_OFFSET_Y)
             saframe:Show()
         elseif (value == "cursor") then
