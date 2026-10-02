@@ -59,6 +59,10 @@ local function AnchorFrame(tip, parent, anchor, isUnitFrame, finally)
         AnchorFrame(tip, parent, addon.db.general.anchor, isUnitFrame, true)
     elseif (anchor.position == "static") then
         LibEvent:trigger("tooltip.anchor.static", tip, parent, anchor.x, anchor.y, anchor.p)
+    elseif (anchor.position == "defaultTopLeft") then
+        LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, "TOPLEFT")
+    elseif (anchor.position == "defaultBottomLeft") then
+        LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, "BOTTOMLEFT")
     end
 end
 
