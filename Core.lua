@@ -957,13 +957,48 @@ local function IsStyled(tip)
     return tip and tip.style and not (tip.IsForbidden and tip:IsForbidden())
 end
 
-compat.AddTooltipPostCall("Unit", "OnTooltipSetUnit", function(self)
+-- /tt debug: print the next player tooltip's lines before and after TinyTooltip edits them,
+-- and again half a second later, to see the client's default layout.
+local function DebugText(v)
+    if (v == nil) then return "nil" end
+    if (issecret(v)) then return "<secret>" end
+    return (tostring(v):gsub("|", "||"))
+end
+
+function addon:DumpTooltip(tip, label, data)
+    print(format("|cff00ccffTinyTooltip debug (%s): %d lines|r", label, tip:NumLines()))
+    for i = 1, tip:NumLines() do
+        local left = _G[tip:GetName() .. "TextLeft" .. i]
+        local right = _G[tip:GetName() .. "TextRight" .. i]
+        print(format("  %d: [%s] [%s]%s", i, DebugText(left:GetText()), DebugText(right and right:GetText()),
+            left:IsShown() and "" or " (hidden)"))
+    end
+    if (data and data.lines) then
+        for i, line in ipairs(data.lines) do
+            print(format("  data %d: type=%s line=%s [%s]", i, DebugText(line.type), DebugText(line.lineIndex), DebugText(line.leftText)))
+        end
+    end
+end
+
+compat.AddTooltipPostCall("Unit", "OnTooltipSetUnit", function(self, data)
     if (not IsStyled(self) or not self.GetUnit) then return end
+    self.tinyPlayerRows = nil  -- set again by Unit.lua for player tooltips TinyTooltip rewrites
     local unit = select(2, self:GetUnit())
     if (not unit or addon:IsUnitRestricted(unit)) then return end
     local line1 = self:GetName() and _G[self:GetName() .. "TextLeft1"]
     if (not line1 or issecret(line1:GetText())) then return end
+    local debug = addon.debugNextPlayer and self == GameTooltip and UnitIsPlayer(unit)
+    if (debug) then
+        addon.debugNextPlayer = false
+        print(format("|cff00ccffTinyTooltip debug:|r unit=%s class=[%s] LEVEL=[%s] PVP=[%s]",
+            DebugText(unit), DebugText(UnitClass(unit)), DebugText(LEVEL), DebugText(PVP)))
+        addon:DumpTooltip(self, "default", data)
+    end
     LibEvent:trigger("tooltip:unit", self, unit)
+    if (debug) then
+        addon:DumpTooltip(self, "TinyTooltip")
+        C_Timer.After(0.5, function() addon:DumpTooltip(self, "0.5s later") end)
+    end
 end)
 
 compat.AddTooltipPostCall("Item", "OnTooltipSetItem", function(self)

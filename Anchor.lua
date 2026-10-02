@@ -43,6 +43,14 @@ local function AnchorDefaultPosition(tip, parent, anchor, finally)
     end
 end
 
+-- "default <corner>": stay in Blizzard's tooltip area, pinned by that corner
+local defaultCorners = {
+    defaultTopLeft     = "TOPLEFT",
+    defaultBottomLeft  = "BOTTOMLEFT",
+    defaultTopRight    = "TOPRIGHT",
+    defaultBottomRight = "BOTTOMRIGHT",
+}
+
 local function AnchorFrame(tip, parent, anchor, isUnitFrame, finally)
     if (not anchor) then return end
     if (anchor.hiddenInCombat and InCombatLockdown()) then
@@ -59,10 +67,8 @@ local function AnchorFrame(tip, parent, anchor, isUnitFrame, finally)
         AnchorFrame(tip, parent, addon.db.general.anchor, isUnitFrame, true)
     elseif (anchor.position == "static") then
         LibEvent:trigger("tooltip.anchor.static", tip, parent, anchor.x, anchor.y, anchor.p)
-    elseif (anchor.position == "defaultTopLeft") then
-        LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, "TOPLEFT")
-    elseif (anchor.position == "defaultBottomLeft") then
-        LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, "BOTTOMLEFT")
+    elseif (defaultCorners[anchor.position]) then
+        LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, defaultCorners[anchor.position])
     end
 end
 

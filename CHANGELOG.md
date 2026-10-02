@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.4 (2026-10-02)
+
+- Fixed the class showing twice on player tooltips (reported by ixlone and IAmDetonate). Forever puts the
+  class, and sometimes "PvP", on lines of their own, which TinyTooltip didn't hide. These default lines are
+  now hidden wherever they appear.
+- Fixed the "Target:" line flickering and the tooltip height jumping over unit frames that refresh the
+  tooltip on their own timer, such as EllesmereUI (reported by skauert). The line is now added whenever
+  the tooltip is rebuilt.
+- Fixed a Lua error when opening the static anchor window for one tooltip type after another that uses a
+  different corner (reported by user_r29lu4y42fhwsysg; fix by msromike). The window also no longer leaves
+  the previous corner highlighted.
+- New anchor choices **default top left / bottom left / top right / bottom right**: the tooltip stays in
+  Blizzard's tooltip area but is pinned by the chosen corner, so it can hang down from an area moved to the
+  top of the screen (left corners by msromike).
+- New `/tt debug`: prints the next player tooltip's lines to chat, for bug reports.
+- Fixed an invalid escape sequence in a texture path (msromike). No change in game.
+
 ## 1.0.3 (2026-09-22)
 
 - Fixed static ("anchor") tooltip positioning (reported by SwiftyBag). This client attaches the default

@@ -28,25 +28,32 @@ local function GetTargetString(unit)
     end
 end
 
+local function UpdateTargetLine(tip)
+    if (not UnitExists("mouseover") or addon:IsUnitRestricted("mouseover")) then return end
+    if (addon.db.unit.player.showTarget and UnitIsPlayer("mouseover"))
+        or (addon.db.unit.npc.showTarget and not UnitIsPlayer("mouseover")) then
+        local line = addon:FindLine(tip, "^"..TARGET..":")
+        local text = GetTargetString("mouseovertarget")
+        if (line and not text) then
+            addon:HideLine(tip, "^"..TARGET..":")
+            tip:Show()
+        elseif (not line and text) then
+            tip:AddLine(format("%s: %s", TARGET, text))
+            tip:Show()
+        elseif (line) then
+            line:SetFormattedText("%s: %s", TARGET, text)
+        end
+    end
+end
+
+-- The timer only follows target changes. The line is also added whenever the tooltip
+-- is rebuilt (below), because unit frames that refresh the tooltip on their own timer
+-- would otherwise wipe it until the next tick, making it flicker.
 GameTooltip:HookScript("OnUpdate", function(self, elapsed)
     self.updateElapsed = (self.updateElapsed or 0) + elapsed
     if (self.updateElapsed >= TOOLTIP_UPDATE_TIME) then
         self.updateElapsed = 0
-        if (not UnitExists("mouseover") or addon:IsUnitRestricted("mouseover")) then return end
-        if (addon.db.unit.player.showTarget and UnitIsPlayer("mouseover"))
-            or (addon.db.unit.npc.showTarget and not UnitIsPlayer("mouseover")) then
-            local line = addon:FindLine(self, "^"..TARGET..":")
-            local text = GetTargetString("mouseovertarget")
-            if (line and not text) then
-                addon:HideLine(self, "^"..TARGET..":")
-                self:Show()
-            elseif (not line and text) then
-                self:AddLine(format("%s: %s", TARGET, text))
-                self:Show()
-            elseif (line) then
-                line:SetFormattedText("%s: %s", TARGET, text)
-            end
-        end
+        UpdateTargetLine(self)
     end
 end)
 
@@ -81,6 +88,7 @@ end
 
 LibEvent:attachTrigger("tooltip:unit", function(self, tip, unit)
     if (unit == "mouseover" or nosecret(UnitIsUnit(unit, "mouseover"))) then
+        if (tip == GameTooltip) then UpdateTargetLine(tip) end
         local num = GetNumGroupMembers()
         if (num >= 1) and
           ((addon.db.unit.player.showTargetBy and UnitIsPlayer("mouseover"))

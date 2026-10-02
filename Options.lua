@@ -363,6 +363,13 @@ local function CreateAnchorButton(frame, anchorPoint)
     end)
     frame[anchorPoint] = button
 end
+-- un-highlight every corner (the picker is shared by the General/Player/NPC anchors)
+local function ResetAnchorButtons(frame)
+    for _, p in ipairs({"TOPLEFT", "LEFT", "BOTTOMLEFT", "TOP", "BOTTOM", "TOPRIGHT", "RIGHT", "BOTTOMRIGHT"}) do
+        if (frame[p]) then frame[p]:GetNormalTexture():SetVertexColor(1, 1, 1, 1) end
+    end
+end
+
 local function CreateAnchorInput(frame, k)
     local box = CreateFrame("EditBox", nil, frame, "NumericInputSpinnerTemplate")
     box:SetNumeric(nil)
@@ -469,6 +476,7 @@ function widgets:anchorbutton(parent, config)
             saframe.kx = self.keystring .. ".x"
             saframe.ky = self.keystring .. ".y"
             saframe.cp = self.keystring .. ".p"
+            ResetAnchorButtons(saframe)
             saframe[GetVariable(saframe.cp) or "BOTTOMRIGHT"]:GetNormalTexture():SetVertexColor(1, 0.2, 0.1, 1)
             saframe:ClearAllPoints()
             saframe:SetPoint(GetVariable(saframe.cp) or "BOTTOMRIGHT", UIParent, GetVariable(saframe.cp) or "BOTTOMRIGHT", GetVariable(saframe.kx) or -CONTAINER_OFFSET_X-13, GetVariable(saframe.ky) or CONTAINER_OFFSET_Y)
@@ -479,6 +487,7 @@ function widgets:anchorbutton(parent, config)
             caframe.cp = self.keystring .. ".cp"
             caframe.inputx:SetText(GetVariable(caframe.cx) or 0)
             caframe.inputy:SetText(GetVariable(caframe.cy) or 0)
+            ResetAnchorButtons(caframe)
             caframe[GetVariable(caframe.cp) or "BOTTOM"]:GetNormalTexture():SetVertexColor(1, 0.2, 0.1, 1)
             caframe:Show()
         end
@@ -576,7 +585,7 @@ local options = {
         { keystring = "general.borderSize",         type = "slider", min = 1, max = 6, step = 1 },
         { keystring = "general.borderCorner",       type = "dropdown", dropdata = widgets.borderDropdata },
         { keystring = "general.bgfile",             type = "dropdown", dropdata = widgets.bgfileDropdata },
-        { keystring = "general.anchor",             type = "anchor", dropdata = {"default","defaultTopLeft","defaultBottomLeft","cursorRight","cursor","static"} },
+        { keystring = "general.anchor",             type = "anchor", dropdata = {"default","defaultTopLeft","defaultBottomLeft","defaultTopRight","defaultBottomRight","cursorRight","cursor","static"} },
         { keystring = "item.coloredItemBorder",     type = "checkbox" },
         { keystring = "item.showItemIcon",          type = "checkbox" },
         { keystring = "quest.coloredQuestBorder",   type = "checkbox" },
@@ -590,7 +599,7 @@ local options = {
         { keystring = "unit.player.grayForDead",          type = "checkbox" },
         { keystring = "unit.player.coloredBorder",        type = "dropdown", dropdata = widgets.colorDropdata },
         { keystring = "unit.player.background",           type = "dropdownslider", dropdata = widgets.colorDropdata, min = 0, max = 1, step = 0.01 },
-        { keystring = "unit.player.anchor",               type = "anchor", dropdata = {"inherit", "default","defaultTopLeft","defaultBottomLeft","cursorRight","cursor","static"} },
+        { keystring = "unit.player.anchor",               type = "anchor", dropdata = {"inherit", "default","defaultTopLeft","defaultBottomLeft","defaultTopRight","defaultBottomRight","cursorRight","cursor","static"} },
         { keystring = "unit.player.elements.factionBig",  type = "element", filter = false,},
         { keystring = "unit.player.elements.raidIcon",    type = "element", filter = true, },
         { keystring = "unit.player.elements.roleIcon",    type = "element", filter = true, },
@@ -626,7 +635,7 @@ local options = {
         { keystring = "unit.npc.grayForDead",           type = "checkbox" },
         { keystring = "unit.npc.coloredBorder",         type = "dropdown", dropdata = widgets.colorDropdata },
         { keystring = "unit.npc.background",            type = "dropdownslider", dropdata = widgets.colorDropdata, min = 0, max = 1, step = 0.01 },
-        { keystring = "unit.npc.anchor",                type = "anchor", dropdata = {"inherit","default","defaultTopLeft","defaultBottomLeft","cursorRight","cursor","static"} },
+        { keystring = "unit.npc.anchor",                type = "anchor", dropdata = {"inherit","default","defaultTopLeft","defaultBottomLeft","defaultTopRight","defaultBottomRight","cursorRight","cursor","static"} },
         { keystring = "unit.npc.elements.factionBig",   type = "element", filter = false,},
         { keystring = "unit.npc.elements.raidIcon",     type = "element", filter = true, },
         { keystring = "unit.npc.elements.classIcon",    type = "element", filter = true, },
@@ -850,6 +859,9 @@ function SlashCmdList.TinyTooltip(msg, editbox)
         compat.OpenOptionsCategory(frameSpell)
     elseif (msg == "statusbar") then
         compat.OpenOptionsCategory(frameStatusbar)
+    elseif (msg == "debug") then
+        addon.debugNextPlayer = true
+        print("|cff00ccffTinyTooltip:|r hover over a player to print their tooltip lines.")
     else
         compat.OpenOptionsCategory(frame)
     end
