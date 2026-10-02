@@ -12,6 +12,19 @@ BigTipDB = {}
 TinyTooltipCharacterDB = {}
 local safecolor = addon.safecolor
 
+-- Forever shows one realm, so the guild realm (the hidden realm behind it) is noise. 1.0.4 turns it
+-- off once, also in saved settings; it can still be turned back on in the options.
+-- Checks the saved table before merging: merging copies the flag from the account settings.
+local function MergeVariables(db, saved)
+    local migrate = not saved.guildRealmOff104
+    db = addon:MergeVariable(db, saved)
+    if (not migrate) then return db end
+    db.guildRealmOff104 = true
+    local elements = db.unit and db.unit.player and db.unit.player.elements
+    if (elements and elements.guildRealm) then elements.guildRealm.enable = false end
+    return db
+end
+
 -- The unit shown on GameTooltip (falls back to mouse focus / mouseover)
 local function GetTooltipUnit()
     local unit = GameTooltip.GetUnit and select(2, GameTooltip:GetUnit())
@@ -88,10 +101,10 @@ LibEvent:attachEvent("VARIABLES_LOADED", function()
         end
     end)
     --Variable
-    addon.db = addon:MergeVariable(addon.db, BigTipDB)
+    addon.db = MergeVariables(addon.db, BigTipDB)
     if (addon.db.general.SavedVariablesPerCharacter) then
         local db = CopyTable(addon.db)
-        addon.db = addon:MergeVariable(db, TinyTooltipCharacterDB)
+        addon.db = MergeVariables(db, TinyTooltipCharacterDB)
     end
     LibEvent:trigger("tooltip:variables:loaded")
     --Init

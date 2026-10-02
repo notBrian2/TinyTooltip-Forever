@@ -14,6 +14,9 @@
 - New anchor choices **default top left / bottom left / top right / bottom right**: the tooltip stays in
   Blizzard's tooltip area but is pinned by the chosen corner, so it can hang down from an area moved to the
   top of the screen (left corners by msromike).
+- The guild realm (e.g. "ClassicBetaPvP" after the guild name) is now off by default, including for
+  existing settings. Forever shows a single realm, so it only revealed which hidden server realm a
+  guild was on. You can turn it back on under Player → Guild Realm.
 - New `/tt debug`: prints the next player tooltip's lines to chat, for bug reports.
 - Fixed an invalid escape sequence in a texture path (msromike). No change in game.
 

@@ -57,7 +57,7 @@ addon.db = {
                 guildName   = { enable = true, color = "ff00ff", wildcard = "<%s>", filter = "none" },
                 guildIndex  = { enable = false, color = "cc88ff", wildcard = "%s",  filter = "none" },
                 guildRank   = { enable = true, color = "cc88ff", wildcard = "(%s)", filter = "none" },
-                guildRealm  = { enable = true, color = "00cccc", wildcard = "%s",   filter = "none" },
+                guildRealm  = { enable = false,color = "00cccc", wildcard = "%s",   filter = "none" },
                 levelValue  = { enable = true, color = "level",   wildcard = "%s",  filter = "none" }, 
                 gearScore   = { enable = true, color = "score", wildcard = "(%d)",  filter = "samefaction"},
                 factionName = { enable = true, color = "faction", wildcard = "%s",  filter = "none" }, 
