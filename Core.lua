@@ -957,7 +957,7 @@ local function IsStyled(tip)
     return tip and tip.style and not (tip.IsForbidden and tip:IsForbidden())
 end
 
--- /tt debug: print the next player tooltip's lines before and after TinyTooltip edits them,
+-- /tt debug: print the next unit tooltip's lines before and after TinyTooltip edits them,
 -- and again half a second later, to see the client's default layout.
 local function DebugText(v)
     if (v == nil) then return "nil" end
@@ -982,16 +982,17 @@ end
 
 compat.AddTooltipPostCall("Unit", "OnTooltipSetUnit", function(self, data)
     if (not IsStyled(self) or not self.GetUnit) then return end
-    self.tinyPlayerRows = nil  -- set again by Unit.lua for player tooltips TinyTooltip rewrites
+    self.tinyUnitRows = nil  -- set again by Unit.lua for unit tooltips TinyTooltip rewrites
     local unit = select(2, self:GetUnit())
     if (not unit or addon:IsUnitRestricted(unit)) then return end
     local line1 = self:GetName() and _G[self:GetName() .. "TextLeft1"]
     if (not line1 or issecret(line1:GetText())) then return end
-    local debug = addon.debugNextPlayer and self == GameTooltip and UnitIsPlayer(unit)
+    local debug = addon.debugNextUnit and self == GameTooltip
     if (debug) then
-        addon.debugNextPlayer = false
-        print(format("|cff00ccffTinyTooltip debug:|r unit=%s class=[%s] LEVEL=[%s] PVP=[%s]",
-            DebugText(unit), DebugText(UnitClass(unit)), DebugText(LEVEL), DebugText(PVP)))
+        addon.debugNextUnit = false
+        print(format("|cff00ccffTinyTooltip debug:|r unit=%s class=[%s] creature=[%s] classif=[%s] LEVEL=[%s] PVP=[%s]",
+            DebugText(unit), DebugText(UnitClass(unit)), DebugText(UnitCreatureType(unit)),
+            DebugText(UnitClassification(unit)), DebugText(LEVEL), DebugText(PVP)))
         addon:DumpTooltip(self, "default", data)
     end
     LibEvent:trigger("tooltip:unit", self, unit)

@@ -25,7 +25,7 @@ The folder must be named `TinyTooltip`. This port replaces the original addon, s
 - `/tt`, `/tip` or `/tinytooltip`: open the options (Settings → AddOns → TinyTooltip)
 - `/tt player`, `/tt npc`, `/tt spell`, `/tt statusbar`: open a specific options page
 - `/tt reset`: reset all settings (then `/reload`)
-- `/tt debug`: print the next player tooltip's lines to chat (useful for bug reports)
+- `/tt debug`: print the next player or NPC tooltip's lines to chat (useful for bug reports)
 
 ## What changed for Forever
 

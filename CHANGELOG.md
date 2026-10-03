@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 (2026-10-03)
+
+- Fixed the creature type showing twice on NPC tooltips, e.g. "7 Beast" and then "Beast" (reported by
+  Zaro1996). Forever puts the creature type, and the elite/rare classification, on lines of their own.
+  These are now hidden like the player class line in 1.0.4.
+- Choosing **Static** as a tooltip position now opens the anchor box straight away if it has never been
+  placed. Until the box is dragged, a static tooltip stays in the default bottom-right spot, which looked
+  like the setting wasn't working.
+- `/tt debug` now works on NPCs as well as players.
+
 ## 1.0.4 (2026-10-02)
 
 - Fixed the class showing twice on player tooltips (reported by ixlone and IAmDetonate). Forever puts the

@@ -71,26 +71,39 @@ local function ShowBigFactionIcon(tip, config, raw)
     end
 end
 
--- Blizzard's own player lines (level/race, class, faction, PvP), compared without color codes.
--- Forever puts some of these on lines of their own, below the rows TinyTooltip writes.
-local function IsDefaultPlayerLine(text, className)
+-- Blizzard's own unit lines (level, class, faction, creature type, PvP), compared without color
+-- codes. Forever puts some of these on lines of their own, below the rows TinyTooltip writes.
+local function IsDefaultUnitLine(text, defaults)
     text = strtrim((text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")))
-    return text == className or text == PVP or text == FACTION_ALLIANCE or text == FACTION_HORDE
-        or strfind(text, "^"..LEVEL) ~= nil
+    return defaults[text] or defaults[(text:match("^%((.+)%)$"))] or strfind(text, "^"..LEVEL) ~= nil
 end
 
--- Hides every default player line after the first `rows` lines. Returns true if any was hidden.
-local function HideDefaultPlayerLines(tip, rows, className)
+-- Hides every default unit line after the first `rows` lines. Returns true if any was hidden.
+local function HideDefaultUnitLines(tip, rows, defaults)
     local hidden = false
     for i = rows + 1, tip:NumLines() do
         local line = _G[tip:GetName() .. "TextLeft" .. i]
         local text = nosecret(line:GetText())
-        if (text and text ~= "" and IsDefaultPlayerLine(text, className)) then
+        if (text and text ~= "" and IsDefaultUnitLine(text, defaults)) then
             line:SetText(nil)
             hidden = true
         end
     end
     return hidden
+end
+
+-- Remembers which lines TinyTooltip wrote and which default texts to hide below them,
+-- so the OnUpdate check below can hide lines the client adds later.
+local function SetDefaultUnitLines(tip, rows, ...)
+    local defaults = tip.tinyUnitDefaults or {}
+    wipe(defaults)
+    defaults[PVP] = true
+    for i = 1, select("#", ...) do
+        local text = nosecret((select(i, ...)))
+        if (type(text) == "string" and text ~= "") then defaults[text] = true end
+    end
+    tip.tinyUnitRows, tip.tinyUnitDefaults = rows, defaults
+    HideDefaultUnitLines(tip, rows, defaults)
 end
 
 local function PlayerCharacter(tip, unit, config, raw)
@@ -103,8 +116,7 @@ local function PlayerCharacter(tip, unit, config, raw)
     for i, v in ipairs(data) do
         addon:GetLine(tip,i):SetText(strip(table.concat(v, " ")))
     end
-    tip.tinyPlayerRows, tip.tinyClassName = #data, nosecret(raw.className)
-    HideDefaultPlayerLines(tip, tip.tinyPlayerRows, tip.tinyClassName)
+    SetDefaultUnitLines(tip, #data, raw.className, FACTION_ALLIANCE, FACTION_HORDE)
     ColorBorder(tip, config, raw)
     ColorBackground(tip, config, raw)
     GrayForDead(tip, config, unit)
@@ -113,6 +125,7 @@ end
 
 local function NonPlayerCharacter(tip, unit, config, raw)
     local levelLine = addon:FindLine(tip, "^"..LEVEL)
+    local rows = 1
     if (levelLine or tip:NumLines() > 1) then
         local data = addon:GetUnitData(unit, config.elements, raw)
         local titleLine = addon:GetNpcTitle(tip)
@@ -133,9 +146,12 @@ local function NonPlayerCharacter(tip, unit, config, raw)
                 addon:GetLine(tip,i):SetText(table.concat(v, " "))
             end
         end
+        rows = #data + increase
     end
     addon:HideLine(tip, "^"..LEVEL)
     addon:HideLine(tip, "^"..PVP)
+    -- Forever shows the creature type (and classification) on a line of its own
+    SetDefaultUnitLines(tip, rows, raw.creature, raw.classifBoss, raw.classifElite, raw.classifRare)
     ColorBorder(tip, config, raw)
     ColorBackground(tip, config, raw)
     GrayForDead(tip, config, unit)
@@ -144,21 +160,21 @@ end
 
 -- In case the client adds default lines after the tooltip was built, check again on each tick.
 LibEvent:attachTrigger("tooltip:cleared, tooltip:hide", function(self, tip)
-    tip.tinyPlayerRows, tip.tinyClassName = nil, nil
+    tip.tinyUnitRows = nil
 end)
 
 GameTooltip:HookScript("OnUpdate", function(self, elapsed)
-    if (not self.tinyPlayerRows or not self:GetUnit()) then return end
+    if (not self.tinyUnitRows or not self:GetUnit()) then return end
     self.tinyCleanupElapsed = (self.tinyCleanupElapsed or 0) + elapsed
     if (self.tinyCleanupElapsed < 0.2) then return end
     self.tinyCleanupElapsed = 0
-    if (HideDefaultPlayerLines(self, self.tinyPlayerRows, self.tinyClassName)) then
+    if (HideDefaultUnitLines(self, self.tinyUnitRows, self.tinyUnitDefaults)) then
         self:Show()
     end
 end)
 
 LibEvent:attachTrigger("tooltip:unit", function(self, tip, unit)
-    tip.tinyPlayerRows = nil
+    tip.tinyUnitRows = nil
     local raw = addon:GetUnitInfo(unit)
     if (UnitIsPlayer(unit)) then
         PlayerCharacter(tip, unit, addon.db.unit.player, raw)

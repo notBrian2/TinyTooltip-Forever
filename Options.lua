@@ -260,6 +260,12 @@ function widgets:dropdown(parent, config, labelText)
             info.func = function(self, dropdown)
                 SetVariable(dropdown.keystring, self.value)
                 UIDropDownMenu_SetSelectedValue(dropdown, self.value)
+                -- picking Static opens the position box if it was never placed; until it is
+                -- dragged, a static tooltip sits in the default bottom-right spot
+                local anchorbutton = dropdown:GetParent().anchorbutton
+                if (self.value == "static" and anchorbutton and GetVariable(anchorbutton.keystring .. ".x") == nil) then
+                    anchorbutton:Click()
+                end
             end
             if (strfind(keystring, ".+Font$")) then
                 info.font = addon:GetFont(v)
@@ -860,8 +866,8 @@ function SlashCmdList.TinyTooltip(msg, editbox)
     elseif (msg == "statusbar") then
         compat.OpenOptionsCategory(frameStatusbar)
     elseif (msg == "debug") then
-        addon.debugNextPlayer = true
-        print("|cff00ccffTinyTooltip:|r hover over a player to print their tooltip lines.")
+        addon.debugNextUnit = true
+        print("|cff00ccffTinyTooltip:|r hover over a player or NPC to print their tooltip lines.")
     else
         compat.OpenOptionsCategory(frame)
     end
