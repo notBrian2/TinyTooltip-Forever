@@ -659,8 +659,11 @@ LibEvent:attachTrigger("tooltip.scale", function(self, frame, scale)
     frame:SetScale(tonumber(scale) or 1)  -- older versions saved the slider value as a string
 end)
 
+-- keep Blizzard's ANCHOR_NONE owner; AnchorCursor (Anchor.lua) moves the tooltip with the cursor
 LibEvent:attachTrigger("tooltip.anchor.cursor", function(self, frame, parent)
-    frame:SetOwner(parent, "ANCHOR_CURSOR")
+    if (frame:GetAnchorType() ~= "ANCHOR_NONE") then
+        frame:SetOwner(parent, "ANCHOR_NONE")
+    end
 end)
 
 LibEvent:attachTrigger("tooltip.anchor.cursor.right", function(self, frame, parent, offsetX, offsetY)

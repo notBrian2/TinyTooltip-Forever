@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.6 (2026-10-04)
+
+- Fixed tooltips flickering when the position is set to **Cursor**. The game and TinyTooltip were both
+  moving the tooltip and kept undoing each other. Cursor Right was not affected.
+- Tooltips set to **Cursor** now fade out when you mouse off a unit, instead of staying on screen.
+
 ## 1.0.5 (2026-10-03)
 
 - Fixed the creature type showing twice on NPC tooltips, e.g. "7 Beast" and then "Beast" (reported by

@@ -5,9 +5,14 @@ local LibSchedule = LibStub:GetLibrary("LibSchedule.7000")
 local addon = TinyTooltip
 local compat = select(2, ...).compat
 
+-- The tooltip stays ANCHOR_NONE (as Blizzard leaves it) and this task moves it with the cursor.
+-- ANCHOR_CURSOR made the engine re-place it on every rebuild, fighting this task (flicker), and
+-- Blizzard only fades out a world tooltip it anchored itself, so ANCHOR_CURSOR ones never faded.
+-- Stop once anything else re-anchors or re-owns the tooltip.
 local function AnchorCursorOnExecute(self)
     if (not self.tip:IsShown()) then return true end
-    if (self.tip:GetAnchorType() ~= "ANCHOR_CURSOR") then return true end
+    if (self.tip.tinyAnchorGen ~= self.gen) then return true end
+    if (self.tip:GetAnchorType() ~= "ANCHOR_NONE" or self.tip:GetOwner() ~= self.owner) then return true end
     local x, y = GetCursorPosition()
     self.tip:ClearAllPoints()
     self.tip:SetPoint(self.cp, UIParent, "BOTTOMLEFT", floor(x/self.scale+self.cx), floor(y/self.scale+self.cy))
@@ -29,6 +34,8 @@ local function AnchorCursor(tip, parent, cp, cx, cy)
         cx       = cx,
         cy       = cy,
         scale    = scale,
+        gen      = tip.tinyAnchorGen,
+        owner    = tip:GetOwner(),
         onExecute = AnchorCursorOnExecute,
     })
 end
@@ -74,6 +81,7 @@ end
 
 LibEvent:attachTrigger("tooltip:anchor", function(self, tip, parent)
     if (tip ~= GameTooltip) then return end
+    tip.tinyAnchorGen = (tip.tinyAnchorGen or 0) + 1
     local unit
     local focus = compat.GetMouseFocus()
     local isUnitFrame = false
