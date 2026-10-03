@@ -10,6 +10,9 @@
   like the setting wasn't working.
 - Fixed the "PvP" line staying on PvP-flagged players' tooltips. Forever's own name for it is "Player vs.
   Player", so TinyTooltip never matched the line.
+- GearScore (the grey "(0)" after a player's class) is now off by default, including for existing settings.
+  It's a TBC/Wrath-era score with no data on Forever. If you turn it back on under Player → GearScore, it
+  only shows when there's a score.
 - `/tt debug` now works on NPCs as well as players.
 
 ## 1.0.4 (2026-10-02)

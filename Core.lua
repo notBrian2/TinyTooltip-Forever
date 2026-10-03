@@ -341,12 +341,11 @@ function addon:GetUnitGearscore(unit)
         local guid = UnitGUID(unit)
         if guid and LibGS then
             local _, gsdata = LibGS:GetScore(guid)
-            if gsdata then
+            if gsdata and gsdata.GearScore and gsdata.GearScore > 0 then
                 return gsdata.GearScore
             end
         end
     end
-    return 0
 end
 
 -- 頭銜 @param2:true為前綴

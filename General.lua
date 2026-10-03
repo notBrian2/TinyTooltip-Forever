@@ -12,16 +12,25 @@ BigTipDB = {}
 TinyTooltipCharacterDB = {}
 local safecolor = addon.safecolor
 
--- Forever shows one realm, so the guild realm (the hidden realm behind it) is noise. 1.0.4 turns it
--- off once, also in saved settings; it can still be turned back on in the options.
--- Checks the saved table before merging: merging copies the flag from the account settings.
+-- Player elements that are noise on Forever, turned off once, also in saved settings; they can still
+-- be turned back on in the options. 1.0.4: the guild realm (the hidden realm behind Forever's one
+-- realm). 1.0.5: GearScore, a TBC/Wrath-era score that has no data here and always showed "(0)".
+-- Checks the saved table before merging: merging copies the flags from the account settings.
+local turnOff = {
+    { flag = "guildRealmOff104", element = "guildRealm" },
+    { flag = "gearScoreOff105",  element = "gearScore" },
+}
 local function MergeVariables(db, saved)
-    local migrate = not saved.guildRealmOff104
+    local pending = {}
+    for _, v in ipairs(turnOff) do
+        if (not saved[v.flag]) then tinsert(pending, v) end
+    end
     db = addon:MergeVariable(db, saved)
-    if (not migrate) then return db end
-    db.guildRealmOff104 = true
     local elements = db.unit and db.unit.player and db.unit.player.elements
-    if (elements and elements.guildRealm) then elements.guildRealm.enable = false end
+    for _, v in ipairs(pending) do
+        db[v.flag] = true
+        if (elements and elements[v.element]) then elements[v.element].enable = false end
+    end
     return db
 end
 
