@@ -8,6 +8,8 @@
 - Choosing **Static** as a tooltip position now opens the anchor box straight away if it has never been
   placed. Until the box is dragged, a static tooltip stays in the default bottom-right spot, which looked
   like the setting wasn't working.
+- Fixed the "PvP" line staying on PvP-flagged players' tooltips. Forever's own name for it is "Player vs.
+  Player", so TinyTooltip never matched the line.
 - `/tt debug` now works on NPCs as well as players.
 
 ## 1.0.4 (2026-10-02)

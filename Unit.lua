@@ -4,6 +4,8 @@ local LibEvent = LibStub:GetLibrary("LibEvent.7000")
 local AFK = AFK
 local DND = DND
 local PVP = PVP
+-- the tooltip's own PvP line says "PvP"; Forever's PVP string is "Player vs. Player"
+local PVP_LINE = PVP_ENABLED or "PvP"
 local LEVEL = LEVEL
 local OFFLINE = FRIENDS_LIST_OFFLINE
 local FACTION_HORDE = FACTION_HORDE
@@ -97,7 +99,7 @@ end
 local function SetDefaultUnitLines(tip, rows, ...)
     local defaults = tip.tinyUnitDefaults or {}
     wipe(defaults)
-    defaults[PVP] = true
+    defaults[PVP], defaults[PVP_LINE], defaults["PvP"] = true, true, true
     for i = 1, select("#", ...) do
         local text = nosecret((select(i, ...)))
         if (type(text) == "string" and text ~= "") then defaults[text] = true end
