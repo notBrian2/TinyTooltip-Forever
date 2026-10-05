@@ -13,7 +13,7 @@ client behaviour first, audits all the code, then fixes everything in one releas
    `WTF/Account/<id>/SavedVariables/TinyTooltipRecorder.lua`.
 3. **Analyse and fix** (done 2026-10-05: rig 75/75 + 19/19 sweep checks; 1.0.6 fails 9 of the 19). Load that file with lupa. Turn the real raw/final line sets into rig fixtures and add
    fade/hide timing to the mock. Every fix needs a check that fails on 1.0.6.
-4. **1.1.0.** One release, then Brian runs the same checklist once more to compare against the first recording.
+4. **1.1.0** (released 2026-10-05, confirmed in game). Brian skipped the second recording, so the sweep is closed.
 
 ## Recording 1 (2026-10-05, 1.0.6, client 1.60.1.70205)
 
