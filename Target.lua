@@ -28,8 +28,16 @@ local function GetTargetString(unit)
     end
 end
 
+-- True when the tooltip shows the mouseover unit (not an item or spell while a unit is moused over)
+local function ShowsMouseover(tip)
+    local unit = select(2, tip:GetUnit())
+    if (not unit or compat.issecret(unit)) then return false end
+    return unit == "mouseover" or nosecret(UnitIsUnit(unit, "mouseover"))
+end
+
 local function UpdateTargetLine(tip)
     if (not UnitExists("mouseover") or addon:IsUnitRestricted("mouseover")) then return end
+    if (not ShowsMouseover(tip)) then return end
     if (addon.db.unit.player.showTarget and UnitIsPlayer("mouseover"))
         or (addon.db.unit.npc.showTarget and not UnitIsPlayer("mouseover")) then
         local line = addon:FindLine(tip, "^"..TARGET..":")

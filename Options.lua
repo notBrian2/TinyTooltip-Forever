@@ -592,6 +592,7 @@ local options = {
         { keystring = "general.borderCorner",       type = "dropdown", dropdata = widgets.borderDropdata },
         { keystring = "general.bgfile",             type = "dropdown", dropdata = widgets.bgfileDropdata },
         { keystring = "general.anchor",             type = "anchor", dropdata = {"default","defaultTopLeft","defaultBottomLeft","defaultTopRight","defaultBottomRight","cursorRight","cursor","static"} },
+        { keystring = "general.fadeOut",            type = "checkbox" },
         { keystring = "item.coloredItemBorder",     type = "checkbox" },
         { keystring = "item.showItemIcon",          type = "checkbox" },
         { keystring = "quest.coloredQuestBorder",   type = "checkbox" },

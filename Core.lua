@@ -379,21 +379,29 @@ function addon:GetNpcTitle(tip)
 end
 
 --地區
-function addon:GetZone(unit, unitname, realm)
+-- Group members only, also when the unit is "mouseover". Which name the roster uses on Forever
+-- (first name, or the display name with the surname) is unconfirmed, so accept either; elsewhere
+-- it is "Name" or "Name-Realm".
+function addon:GetZone(unit)
     if not IsInGroup() then return end
-    local t, i = string.match(unit, "(.-)(%d+)")
+    local t, i = string.match(unit, "^(%a+)(%d+)$")
     if (i and t == "raid") then
-        return select(7, GetRaidRosterInfo(i))
-    elseif (i and t == "party") then
-        local name, zone
-        local fullname = unitname .. "-" .. realm
-        for j = 1, 5 do
-            name, _, _, _, _, _, zone = GetRaidRosterInfo(j)
-            if (name and not string.find(name, "-") and name == unitname) then
-                return zone
-            elseif (name and string.find(name, "-") and name == fullname) then
-                return zone
-            end
+        return select(7, GetRaidRosterInfo(tonumber(i)))
+    end
+    if not (nosecret(UnitInParty(unit)) or nosecret(UnitInRaid(unit))) then return end
+    local name, second = UnitName(unit)
+    name, second = nosecret(name), nosecret(second)
+    if (not name) then return end
+    local other
+    if (compat.hasSurnames) then
+        other = nosecret((compat.UnitNameAndRealm(unit)))
+    elseif (second and second ~= "") then
+        other = name .. "-" .. second
+    end
+    for j = 1, GetNumGroupMembers() do
+        local rosterName, _, _, _, _, _, zone = GetRaidRosterInfo(j)
+        if (rosterName and (rosterName == name or rosterName == other)) then
+            return zone
         end
     end
 end
@@ -458,7 +466,7 @@ function addon:GetUnitInfo(unit)
     t.classifRare  = (classif == "rare" or classif == "rareelite") and RARE
     t.isPlayer     = UnitIsPlayer(unit) and PLAYER
     t.moveSpeed    = self:GetUnitSpeed(unit)
-    t.zone         = self:GetZone(unit, t.name, t.realm or GetRealmName())
+    t.zone         = self:GetZone(unit)
     t.unit         = unit                     --unit
     t.level        = level                    --1~123|-1
     t.effectiveLevel = effectiveLevel or level
@@ -626,8 +634,10 @@ addon.filterfunc.samerealm = function(raw)
     return raw.realm == GetRealmName()
 end
 
+-- LE_REALM_RELATION_COALESCED isn't defined on Forever (2 = connected realm)
+local REALM_RELATION_COALESCED = LE_REALM_RELATION_COALESCED or 2
 addon.filterfunc.samecrossrealm = function(raw)
-    return UnitRealmRelationship(raw.unit) ~= LE_REALM_RELATION_COALESCED
+    return nosecret(UnitRealmRelationship(raw.unit)) ~= REALM_RELATION_COALESCED
 end
 
 addon.filterfunc.inpvp = function(raw)
@@ -1051,6 +1061,16 @@ end)
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
     LibEvent:trigger("tooltip:anchor", self, parent)
 end)
+
+-- Blizzard fades GameTooltip out when the mouse leaves a world object or a unit frame: it stays
+-- fully visible for 1 s, then fades for 1 s. Hide it at once unless the Fade Out option is on.
+-- Cursor-anchored tooltips are already hidden by then, but FadeOut leaves them flagged as shown
+-- (empty) until the next hover; Hide clears that too.
+if (GameTooltip.FadeOut) then
+    hooksecurefunc(GameTooltip, "FadeOut", function(self)
+        if (not addon.db.general.fadeOut) then self:Hide() end
+    end)
+end
 
 -- tooltip:init
 -- tooltip:anchor

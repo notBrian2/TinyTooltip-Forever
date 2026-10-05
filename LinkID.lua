@@ -15,7 +15,9 @@ local function ShowId(tooltip, name, value, noBlankLine)
     value = nosecret(value)
     if (not name or not value or (tooltip.IsForbidden and tooltip:IsForbidden())) then return end
     if (IsShiftKeyDown() or IsControlKeyDown() or IsAltKeyDown() or addon.db.general.alwaysShowIdInfo) then
-        local line = addon:FindLine(tooltip, name)
+        -- the ID line starts with "Item:"; a plain search for "Item" also matched other lines,
+        -- such as Forever's "Press F6 to submit an issue for this Item", so the ID was never added
+        local line = addon:FindLine(tooltip, "^" .. name .. ":")
         if (not line) then
             if (not noBlankLine) then tooltip:AddLine(" ") end
             tooltip:AddLine(format("%s: |cffffffff%s|r", name, value), 0, 1, 0.8)

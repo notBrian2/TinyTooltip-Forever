@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0 (2026-10-05)
+
+- Tooltips now disappear as soon as you mouse off a unit, object or unit frame (reported by user_m59…).
+  Blizzard's own fade keeps them on screen for about 2 seconds, and since 1.0.6 that also applied to the
+  **Cursor** position. To keep the fade, turn on **General → Fade Out Tooltips**.
+- This should also fix tooltips that stayed up until you hovered something else (reported by Dorrian).
+- Fixed item and spell IDs never showing on items and action buttons. Forever adds "Press F6 to submit an
+  issue for this Item/Spell" to every tooltip, and TinyTooltip took that line for the ID line.
+- Party members' zone and "Offline" should no longer show twice (reported by ixlone).
+- Smaller fixes: the "Target:" line can't appear on an item or spell tooltip while you're also mousing over
+  a unit; the **Cursor** position no longer stops following the mouse after 5 minutes on one tooltip; and
+  the "same connected realm" filter works on Forever.
+
 ## 1.0.6 (2026-10-04)
 
 - Fixed tooltips flickering when the position is set to **Cursor**. The game and TinyTooltip were both

@@ -27,7 +27,7 @@ local function AnchorCursor(tip, parent, cp, cx, cy)
     LibSchedule:AddTask({
         identity = tostring(tip),
         elasped  = 0.01,
-        expired  = GetTime() + 300,
+        expired  = math.huge,  -- runs until the tooltip hides or is re-anchored (it used to stop after 300 s)
         override = true,
         tip      = tip,
         cp       = cp,

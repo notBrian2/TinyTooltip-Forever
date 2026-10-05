@@ -75,8 +75,12 @@ end
 
 -- Blizzard's own unit lines (level, class, faction, creature type, PvP), compared without color
 -- codes. Forever puts some of these on lines of their own, below the rows TinyTooltip writes.
+local function Plain(text)
+    return strtrim((text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")))
+end
+
 local function IsDefaultUnitLine(text, defaults)
-    text = strtrim((text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")))
+    text = Plain(text)
     return defaults[text] or defaults[(text:match("^%((.+)%)$"))] or strfind(text, "^"..LEVEL) ~= nil
 end
 
@@ -104,6 +108,12 @@ local function SetDefaultUnitLines(tip, rows, ...)
         local text = nosecret((select(i, ...)))
         if (type(text) == "string" and text ~= "") then defaults[text] = true end
     end
+    -- a line the client repeats below TinyTooltip's own rows, such as a party member's zone
+    for i = 1, rows do
+        local line = _G[tip:GetName() .. "TextLeft" .. i]
+        local text = line and nosecret(line:GetText())
+        if (text and text ~= "") then defaults[Plain(text)] = true end
+    end
     tip.tinyUnitRows, tip.tinyUnitDefaults = rows, defaults
     HideDefaultUnitLines(tip, rows, defaults)
 end
@@ -118,7 +128,10 @@ local function PlayerCharacter(tip, unit, config, raw)
     for i, v in ipairs(data) do
         addon:GetLine(tip,i):SetText(strip(table.concat(v, " ")))
     end
-    SetDefaultUnitLines(tip, #data, raw.className, FACTION_ALLIANCE, FACTION_HORDE)
+    -- an offline party member: TinyTooltip shows "(Offline)" after the name, the client its own line
+    local offline = config.elements.statusDC.enable and raw.statusDC
+    SetDefaultUnitLines(tip, #data, raw.className, FACTION_ALLIANCE, FACTION_HORDE,
+        offline and OFFLINE, offline and PLAYER_OFFLINE, offline and "Offline")
     ColorBorder(tip, config, raw)
     ColorBackground(tip, config, raw)
     GrayForDead(tip, config, unit)

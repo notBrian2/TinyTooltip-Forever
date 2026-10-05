@@ -6,6 +6,7 @@ addon.L = {
     ["general.statusbarOffsetY"] = "Statusbar Offset Y (0:Default)",
     ["general.alwaysShowIdInfo"] = "Always Show Id Info (Otherwise hold down SHIFT/ALT)",
     ["general.skinMoreFrames"]   = "Skin More Frames |cffcccc33(need to /reload)|r",
+    ["general.fadeOut"]          = "Fade Out Tooltips (Otherwise they hide at once)",
     ["dropdown.inherit"]        = "|cffffee00inherit|r",
     ["dropdown.default"]        = "|cffaaaaaadefault|r",
     ["dropdown.defaultTopLeft"]    = "|cffaaaaaadefault|r top left",
