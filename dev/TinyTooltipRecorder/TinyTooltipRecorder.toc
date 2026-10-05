@@ -1,0 +1,9 @@
+## Interface: 16001
+## Title: TinyTooltip Recorder (dev)
+## Notes: Records what GameTooltip and TinyTooltip do, for offline bug hunting. Not part of the release.
+## Author: notBrian2
+## Version: dev
+## Dependencies: TinyTooltip
+## SavedVariables: TinyTooltipRecordDB
+
+Recorder.lua

@@ -3,6 +3,7 @@ package-as: TinyTooltip
 ignore:
   - README.md
   - CHANGELOG.md
+  - dev
 
 manual-changelog:
   filename: CHANGELOG.md
