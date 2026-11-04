@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Fixed mob and quest level colours to follow the vanilla rules (reported by damaz). Forever used the
+  retail colours, so at level 22 a level 16 mob showed gray when it still gives XP. Gray now starts at
+  the vanilla gray level (15 at level 22), and yellow covers only ±2 levels.
+
 ## 1.1.0 (2026-10-05)
 
 - Tooltips now disappear as soon as you mouse off a unit, object or unit frame (reported by user_m59…).

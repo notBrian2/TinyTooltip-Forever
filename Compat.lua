@@ -65,6 +65,33 @@ function compat.GetQuestLevel(questID)
     return 0
 end
 
+-- Level colours use the vanilla rules. Forever loads Blizzard's retail GetCreatureDifficultyColor,
+-- whose yellow band reaches -4 and whose green range is too short (a L16 mob is gray at L22).
+-- Gray level as in vanilla (Warcraft Wiki "Mob experience", cmangos-classic Formulas.h).
+function compat.GetGrayLevel(playerLevel)
+    if (playerLevel <= 5) then return 0 end
+    if (playerLevel <= 39) then return playerLevel - 5 - math.floor(playerLevel / 10) end
+    if (playerLevel <= 59) then return playerLevel - 1 - math.floor(playerLevel / 5) end
+    return playerLevel - 9
+end
+
+-- Colour for a mob or quest of the given level, relative to the player.
+function compat.GetDifficultyColor(level)
+    local playerLevel = UnitLevel("player")
+    local levelDiff = level - playerLevel
+    if (levelDiff >= 5) then
+        return QuestDifficultyColors["impossible"]
+    elseif (levelDiff >= 3) then
+        return QuestDifficultyColors["verydifficult"]
+    elseif (levelDiff >= -2) then
+        return QuestDifficultyColors["difficult"]
+    elseif (level > compat.GetGrayLevel(playerLevel)) then
+        return QuestDifficultyColors["standard"]
+    else
+        return QuestDifficultyColors["trivial"]
+    end
+end
+
 -- Register a tooltip post-call; falls back to the legacy OnTooltipSet* script.
 function compat.AddTooltipPostCall(dataType, legacyScript, func)
     if (TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum.TooltipDataType and Enum.TooltipDataType[dataType]) then

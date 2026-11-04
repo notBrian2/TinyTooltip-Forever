@@ -15,7 +15,7 @@ hooksecurefunc(ItemRefTooltip, "SetHyperlink", function(self, link)
     if (schema and schema == "quest") then
         local level = compat.GetQuestLevel(id)
         --local level = C_QuestLog.GetQuestDifficultyLevel(id)
-        local color = GetQuestDifficultyColor(level < 0 and UnitLevel("player") or level)
+        local color = compat.GetDifficultyColor(level < 0 and UnitLevel("player") or level)
         ColorBorder(self, color.r, color.g, color.b)
     end
 end)

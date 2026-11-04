@@ -572,7 +572,7 @@ addon.colorfunc.class = function(raw)
 end
 
 addon.colorfunc.level = function(raw)
-    local color = GetCreatureDifficultyColor(raw.effectiveLevel>0 and raw.effectiveLevel or 999)
+    local color = compat.GetDifficultyColor(raw.effectiveLevel>0 and raw.effectiveLevel or 999)
     return color.r, color.g, color.b, addon:GetHexColor(color)
 end
 
