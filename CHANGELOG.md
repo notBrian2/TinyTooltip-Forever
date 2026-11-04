@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.1 (2026-11-04)
 
 - Fixed mob and quest level colours to follow the vanilla rules (reported by damaz). Forever used the
   retail colours, so at level 22 a level 16 mob showed gray when it still gives XP. Gray now starts at
