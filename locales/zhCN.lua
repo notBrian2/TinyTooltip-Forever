@@ -17,7 +17,7 @@ addon.L = {
     ["general.statusbarOffsetX"]            = "HP位置X边距",
     ["general.statusbarOffsetY"]            = "HP位置Y偏移",
     ["general.statusbarFontSize"]           = "HP文字大小",
-    ["general.statusbarFont"]               = "HP文字字體",
+    ["general.statusbarFont"]               = "HP文字字体",
     ["general.statusbarFontFlag"]           = "HP字体描边",
     ["general.statusbarTexture"]            = "HP背景材质",
     ["general.statusbarColor"]              = "HP颜色",
@@ -60,7 +60,7 @@ addon.L = {
     ["unit.player.elements.guildIndex"]     = "公会阶级数字",
     ["unit.player.elements.guildRank"]      = "公会阶级名称",
     ["unit.player.elements.guildRealm"]     = "公会服务器",
-    ["unit.player.elements.gearScore"]      = "齒輪分數",
+    ["unit.player.elements.gearScore"]      = "装备评分(GS)",
     ["unit.player.elements.levelValue"]     = "等级",
     ["unit.player.elements.factionName"]    = "阵营",
     ["unit.player.elements.gender"]         = "性别",
@@ -95,7 +95,7 @@ addon.L = {
     ["unit.npc.elements.reactionName"]      = "声望",
     ["unit.npc.elements.moveSpeed"]         = "移动速度",
     
-    ["spell.background"]                    = "背景顔色",
+    ["spell.background"]                    = "背景颜色",
     ["spell.borderColor"]                   = "边框颜色",
     ["spell.showIcon"]                      = "法术图标",
     
@@ -151,4 +151,14 @@ addon.L = {
     ["Anchor"]   = "锚点器",
     
     ["TargetBy"] = "被关注",
+
+    ["general.fadeOut"]                     = "渐隐淡出提示框（关闭则移开鼠标立即隐藏）",
+    ["dropdown.defaultTopLeft"]             = "|cffaaaaaa系统默认|r 左上角",
+    ["dropdown.defaultBottomLeft"]          = "|cffaaaaaa系统默认|r 左下角",
+    ["dropdown.defaultTopRight"]            = "|cffaaaaaa系统默认|r 右上角",
+    ["dropdown.defaultBottomRight"]         = "|cffaaaaaa系统默认|r 右下角",
+    ["dropdown.samefaction"]                = "同阵营",
+    ["dropdown.score"]                      = "评分染色",
+    ["showTargetBy"]                        = "显示被关注",
+    ["DIY"]                                 = "自定义布局",
 }
