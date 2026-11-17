@@ -40,14 +40,17 @@ local function AnchorCursor(tip, parent, cp, cx, cy)
     })
 end
 
+-- Where "Fixed Spot in Combat" / "Fixed Spot on Unit Frames" put the tooltip: the spot placed with
+-- the Static anchor if there is one, otherwise Blizzard's tooltip area wherever Edit Mode moved it
+-- (it used to be the screen's bottom-right corner, ignoring Edit Mode).
 local function AnchorDefaultPosition(tip, parent, anchor, finally)
-    if (finally) then
-        LibEvent:trigger("tooltip.anchor.static", tip, parent, anchor.x, anchor.y)
-    elseif (anchor.position == "inherit") then
-        AnchorDefaultPosition(tip, parent, addon.db.general.anchor, true)
-    else
-        LibEvent:trigger("tooltip.anchor.static", tip, parent, anchor.x, anchor.y, anchor.p)
+    if (anchor.position == "inherit" and not finally) then
+        return AnchorDefaultPosition(tip, parent, addon.db.general.anchor, true)
     end
+    if (anchor.x == nil and anchor.y == nil) then
+        return LibEvent:trigger("tooltip.anchor.default.corner", tip, parent, "BOTTOMRIGHT")
+    end
+    LibEvent:trigger("tooltip.anchor.static", tip, parent, anchor.x, anchor.y, anchor.p)
 end
 
 -- "default <corner>": stay in Blizzard's tooltip area, pinned by that corner

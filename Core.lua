@@ -486,7 +486,7 @@ end
 
 -- Filter
 function addon:CheckFilter(config, raw)
-    if (IsAltKeyDown() or IsControlKeyDown()) then return true end
+    if (self.db.general.altShowAll and (IsAltKeyDown() or IsControlKeyDown())) then return true end
     if (not config.enable) then return end
     if (config.filter == "" or config.filter == "none") then
         return true

@@ -4,7 +4,7 @@
 ## Notes: A powerful tooltip addon, ported to World of Warcraft Forever
 ## Notes-zhCN: 专为无限服移植的全能鼠标提示增强插件，支持光标跟随、职业染色、3D模型与自定义布局
 ## Author: M (original), Road-block, notBrian2 (Forever port)
-## Version: 1.1.1
+## Version: 1.1.2
 ## X-License: MIT
 ## X-Website: https://github.com/notBrian2/TinyTooltip-Forever
 ## SavedVariables: BigTipDB

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.2 (unreleased)
+
+- New option **General → Hold ALT/CTRL to Show All Lines** (on by default, as before). Turn it off and
+  holding ALT or CTRL no longer adds every hidden line to the tooltip, handy if you heal with ALT
+  (reported by user_37wxirt2d1vippni).
+- **Fixed Spot in Combat** and **Fixed Spot on Unit Frames** now put the tooltip where Edit Mode puts
+  Blizzard's tooltip, instead of the screen's bottom-right corner. If you placed a spot with the
+  **Static** anchor, they use that spot (requested by reo360).
+- Clearer English names for the position checkboxes: "Hidden In Combat", "Return In Combat" and "Return
+  On Unit Frame" are now **Hide in Combat**, **Fixed Spot in Combat** and **Fixed Spot on Unit Frames**.
+- Complete Simplified Chinese (zhCN) translation of the Forever options (thanks to lich-wang, PR #4).
+- The War Party Kodo's 3D model is zoomed out so it fits.
+
 ## 1.1.1 (2026-11-04)
 
 - Fixed mob and quest level colours to follow the vanilla rules (reported by damaz). Forever used the
