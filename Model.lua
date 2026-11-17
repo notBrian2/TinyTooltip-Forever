@@ -41,29 +41,55 @@ LibEvent:attachTrigger("tooltip:init", function(self, tip)
     end
 end)
 
+-- Unit frames rebuild their tooltip several times a second (ClearLines, then the unit again).
+-- Reloading the model each time reset its facing, so the ALT/CTRL spin jerked back to the start.
+-- A rebuild for the same unit keeps the loaded model; the clear only takes effect if no unit
+-- follows in the same frame.
+local function ModelKey(unit)
+    local guid = UnitGUID(unit)
+    if (not guid or (issecretvalue and issecretvalue(guid))) then return end
+    return guid
+end
+
+local function ShowModel(model, unit, zoom)
+    model.stale = nil
+    local key = ModelKey(unit)
+    if (key and key == model.key and model:IsShown()) then return end
+    model.key = key
+    model.zoom = zoom
+    model:SetUnit(unit)
+    model:SetFacing(-0.25)
+    ApplyZoom(model)
+    model:Show()
+end
+
+local function ClearModel(model)
+    model.stale, model.key = nil, nil
+    model:ClearModel()
+    model:Hide()
+end
+
 LibEvent:attachTrigger("tooltip:unit", function(self, tip, unit)
     if (tip ~= GameTooltip) then return end
     if (not UnitIsVisible(unit)) then return end
     if (addon.db.unit.player.showModel and UnitIsPlayer(unit)) then
-        tip.model.zoom = nil
-        tip.model:SetUnit(unit)
-        tip.model:SetFacing(-0.25)
-        ApplyZoom(tip.model)
-        tip.model:Show()
+        ShowModel(tip.model, unit, nil)
     elseif (addon.db.unit.npc.showModel and not UnitIsPlayer(unit)) then
-        tip.model.zoom = modelZoom[NpcID(unit)]
-        tip.model:SetUnit(unit)
-        tip.model:SetFacing(-0.25)
-        ApplyZoom(tip.model)
-        tip.model:Show()
+        ShowModel(tip.model, unit, modelZoom[NpcID(unit)])
     else
-        tip.model:ClearModel()
-        tip.model:Hide()
+        ClearModel(tip.model)
     end
 end)
 
 LibEvent:attachTrigger("tooltip:cleared", function(self, tip)
-    if (tip ~= GameTooltip) then return end
-    tip.model:ClearModel()
-    tip.model:Hide()
+    if (tip ~= GameTooltip or not tip.model) then return end
+    tip.model.stale = true
+    C_Timer.After(0, function()
+        if (tip.model.stale) then ClearModel(tip.model) end
+    end)
+end)
+
+LibEvent:attachTrigger("tooltip:hide", function(self, tip)
+    if (tip ~= GameTooltip or not tip.model) then return end
+    ClearModel(tip.model)
 end)

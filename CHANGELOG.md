@@ -12,6 +12,8 @@
   On Unit Frame" are now **Hide in Combat**, **Fixed Spot in Combat** and **Fixed Spot on Unit Frames**.
 - Complete Simplified Chinese (zhCN) translation of the Forever options (thanks to lich-wang, PR #4).
 - The War Party Kodo's 3D model is zoomed out so it fits.
+- Holding ALT/CTRL over your own unit frame spins the 3D model smoothly. It used to jerk back to the
+  start several times a second, because the unit frame keeps rebuilding its tooltip.
 
 ## 1.1.1 (2026-11-04)
 
