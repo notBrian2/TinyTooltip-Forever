@@ -22,7 +22,8 @@ addon.db = {
         statusbarTexture  = "Interface\\AddOns\\TinyTooltip\\texture\\StatusBar", --HP材質
         anchor            = { position = "cursorRight", hiddenInCombat = false, returnInCombat = true, returnOnUnitFrame = false, cp = "BOTTOM", p = "BOTTOMRIGHT", }, --鼠標位置 default|cursor|static|cursorRight
         alwaysShowIdInfo  = true,
-        altShowAll        = true,                   --hold ALT/CTRL to show every element, even hidden ones
+        altShowAll        = false,                  --hold ALT/CTRL to show every element, even hidden ones
+        altSpinModel      = false,                  --hold ALT/CTRL to spin the 3D model
         fadeOut           = false,                  --keep Blizzard's fade-out instead of hiding at once
         skinMoreFrames    = true,
         headerFont        = "default",

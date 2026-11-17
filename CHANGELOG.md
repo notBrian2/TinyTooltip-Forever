@@ -2,9 +2,9 @@
 
 ## 1.1.2 (unreleased)
 
-- New option **General → Hold ALT/CTRL to Show All Lines** (on by default, as before). Turn it off and
-  holding ALT or CTRL no longer adds every hidden line to the tooltip, handy if you heal with ALT
-  (reported by user_37wxirt2d1vippni).
+- Holding ALT or CTRL no longer adds every hidden line to the tooltip or spins the 3D model, which got
+  in the way of healing with ALT (reported by user_37wxirt2d1vippni). To get either back, tick
+  **General → Hold ALT/CTRL to Show All Lines** or **Hold ALT/CTRL to Spin the 3D Model**.
 - **Fixed Spot in Combat** and **Fixed Spot on Unit Frames** now put the tooltip where Edit Mode puts
   Blizzard's tooltip, instead of the screen's bottom-right corner. If you placed a spot with the
   **Static** anchor, they use that spot (requested by reo360).
@@ -12,8 +12,9 @@
   On Unit Frame" are now **Hide in Combat**, **Fixed Spot in Combat** and **Fixed Spot on Unit Frames**.
 - Complete Simplified Chinese (zhCN) translation of the Forever options (thanks to lich-wang, PR #4).
 - The War Party Kodo's 3D model is zoomed out so it fits.
-- Holding ALT/CTRL over your own unit frame spins the 3D model smoothly. It used to jerk back to the
-  start several times a second, because the unit frame keeps rebuilding its tooltip.
+- With the spin turned on, holding ALT/CTRL over your own unit frame spins the 3D model smoothly. It
+  used to jerk back to the start several times a second, because the unit frame keeps rebuilding its
+  tooltip.
 
 ## 1.1.1 (2026-11-04)
 

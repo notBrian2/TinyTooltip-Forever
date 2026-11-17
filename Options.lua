@@ -594,6 +594,7 @@ local options = {
         { keystring = "general.anchor",             type = "anchor", dropdata = {"default","defaultTopLeft","defaultBottomLeft","defaultTopRight","defaultBottomRight","cursorRight","cursor","static"} },
         { keystring = "general.fadeOut",            type = "checkbox" },
         { keystring = "general.altShowAll",         type = "checkbox" },
+        { keystring = "general.altSpinModel",       type = "checkbox" },
         { keystring = "item.coloredItemBorder",     type = "checkbox" },
         { keystring = "item.showItemIcon",          type = "checkbox" },
         { keystring = "quest.coloredQuestBorder",   type = "checkbox" },

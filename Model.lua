@@ -31,7 +31,7 @@ LibEvent:attachTrigger("tooltip:init", function(self, tip)
         tip.model:SetPoint("BOTTOMRIGHT", tip, "TOPRIGHT", 8, -16)
         tip.model:Hide()
         tip.model:SetScript("OnUpdate", function(self, elapsed)
-            if (IsControlKeyDown() or IsAltKeyDown()) then
+            if (addon.db.general.altSpinModel and (IsControlKeyDown() or IsAltKeyDown())) then
                 self:SetFacing(self:GetFacing() + math.pi * elapsed)
             end
         end)

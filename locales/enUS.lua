@@ -8,6 +8,7 @@ addon.L = {
     ["general.skinMoreFrames"]   = "Skin More Frames |cffcccc33(need to /reload)|r",
     ["general.fadeOut"]          = "Fade Out Tooltips (Otherwise they hide at once)",
     ["general.altShowAll"]       = "Hold ALT/CTRL to Show All Lines (even hidden ones)",
+    ["general.altSpinModel"]     = "Hold ALT/CTRL to Spin the 3D Model",
     ["hiddenInCombat"]           = "Hide in Combat",
     ["returnInCombat"]           = "Fixed Spot in Combat",
     ["returnOnUnitFrame"]        = "Fixed Spot on Unit Frames",
