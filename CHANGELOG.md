@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.2 (unreleased)
+## 1.1.2 (2026-11-18)
 
 - Holding ALT or CTRL no longer adds every hidden line to the tooltip or spins the 3D model, which got
   in the way of healing with ALT (reported by user_37wxirt2d1vippni). To get either back, tick
